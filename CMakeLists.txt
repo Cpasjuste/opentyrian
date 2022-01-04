@@ -44,5 +44,5 @@ target_link_libraries(${PROJECT_NAME} ${LDFLAGS} m)
 
 if (PS4)
     add_self(${PROJECT_NAME})
-    add_pkg(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/pkg" "OPEN00001" "OpenTyrian @ cpasjuste" "01.00")
+    add_pkg(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/pkg" "OPEN00001" "OpenTyrian @ cpasjuste" "01.01")
 endif ()

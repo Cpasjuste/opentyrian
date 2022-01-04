@@ -348,8 +348,18 @@ void reset_joystick_assignments( int j )
 		{
 			if (a - 4 < (unsigned)SDL_JoystickNumButtons(joystick[j].handle))
 			{
-				joystick[j].assignment[a][0].type = BUTTON;
+                joystick[j].assignment[a][0].type = BUTTON;
 				joystick[j].assignment[a][0].num = a - 4;
+#ifdef __PS4__
+                if(joystick[j].assignment[a][0].num == 0)
+                {
+                	joystick[j].assignment[a][0].num = 2;
+                }
+                else if(joystick[j].assignment[a][0].num == 1)
+                {
+                	joystick[j].assignment[a][0].num = 1;
+                }
+#endif
 			}
 		}
 	}
