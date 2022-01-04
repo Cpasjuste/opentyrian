@@ -1288,7 +1288,11 @@ JE_boolean JE_inGameSetup( void )
 						case 3:
 							if (--processorType < 1)
 							{
+#ifdef __PS4__
+                                processorType = 6;
+#else
 								processorType = 4;
+#endif
 							}
 							JE_initProcessorType();
 							JE_setNewGameSpeed();
@@ -1323,7 +1327,11 @@ JE_boolean JE_inGameSetup( void )
 							samples_disabled = false;
 							break;
 						case 3:
+#ifdef __PS4__
+                            if (++processorType > 6)
+#else
 							if (++processorType > 4)
+#endif
 							{
 								processorType = 1;
 							}
