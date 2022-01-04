@@ -195,7 +195,11 @@ static void window_center_in_display( int display_index )
 
 void reinit_fullscreen( int new_display )
 {
+#ifdef __PS4__
+    fullscreen_display = -1;
+#else
 	fullscreen_display = new_display;
+#endif
 
 	if (fullscreen_display >= SDL_GetNumVideoDisplays())
 	{
