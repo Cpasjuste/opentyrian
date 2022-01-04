@@ -58,5 +58,9 @@ extern const char *opentyrian_version;
 
 void opentyrian_menu( void );
 
+#ifdef __PS4__
+#define printf SDL_Log
+#endif
+
 #endif /* OPENTYR_H */
 

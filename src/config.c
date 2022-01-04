@@ -746,6 +746,10 @@ void JE_decryptSaveTemp( void )
 
 const char *get_user_directory( void )
 {
+#ifdef __PS4__
+	mkdir(USER_DIR, 0777);
+	return USER_DIR;
+#else
 	static char user_dir[500] = "";
 	
 	if (strlen(user_dir) == 0)
@@ -774,6 +778,7 @@ const char *get_user_directory( void )
 	}
 	
 	return user_dir;
+#endif
 }
 
 // for compatibility

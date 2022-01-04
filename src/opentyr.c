@@ -58,6 +58,16 @@
 const char *opentyrian_str = "OpenTyrian";
 const char *opentyrian_version = OPENTYRIAN_VERSION;
 
+#ifdef __PS4__
+#include <orbis/libkernel.h>
+char log_buffer[128];
+void *log_cb(void *userdata, int category, SDL_LogPriority priority, const char *message) {
+    snprintf(log_buffer, 127, "<== SDL2 ==> %s\n", message);
+    sceKernelDebugOutText(0, log_buffer);
+    return NULL;
+}
+#endif
+
 void opentyrian_menu( void )
 {
 	typedef enum
@@ -92,7 +102,7 @@ void opentyrian_menu( void )
 		false,
 		false,
 	};
-	
+
 	assert(COUNTOF(menu_items) == MenuOptions_MAX);
 	assert(COUNTOF(menu_items_disabled) == MenuOptions_MAX);
 
@@ -178,7 +188,7 @@ void opentyrian_menu( void )
 						sel = MenuOptions_MAX - 1;
 				}
 				while (menu_items_disabled[sel]);
-				
+
 				JE_playSampleNum(S_CURSOR);
 				break;
 			case SDL_SCANCODE_DOWN:
@@ -188,10 +198,10 @@ void opentyrian_menu( void )
 						sel = 0;
 				}
 				while (menu_items_disabled[sel]);
-				
+
 				JE_playSampleNum(S_CURSOR);
 				break;
-				
+
 			case SDL_SCANCODE_LEFT:
 				if (sel == MENU_FULLSCREEN)
 				{
@@ -206,7 +216,7 @@ void opentyrian_menu( void )
 					if (temp_scaler == 0)
 						temp_scaler = scalers_count;
 					temp_scaler--;
-					
+
 					JE_playSampleNum(S_CURSOR);
 				}
 				else if (sel == MENU_SCALING_MODE)
@@ -214,7 +224,7 @@ void opentyrian_menu( void )
 					if (temp_scaling_mode == 0)
 						temp_scaling_mode = ScalingMode_MAX;
 					temp_scaling_mode--;
-					
+
 					JE_playSampleNum(S_CURSOR);
 				}
 				break;
@@ -232,7 +242,7 @@ void opentyrian_menu( void )
 					temp_scaler++;
 					if (temp_scaler == scalers_count)
 						temp_scaler = 0;
-					
+
 					JE_playSampleNum(S_CURSOR);
 				}
 				else if (sel == MENU_SCALING_MODE)
@@ -240,11 +250,11 @@ void opentyrian_menu( void )
 					temp_scaling_mode++;
 					if (temp_scaling_mode == ScalingMode_MAX)
 						temp_scaling_mode = 0;
-					
+
 					JE_playSampleNum(S_CURSOR);
 				}
 				break;
-				
+
 			case SDL_SCANCODE_RETURN:
 				switch (sel)
 				{
@@ -257,13 +267,13 @@ void opentyrian_menu( void )
 					JE_showVGA();
 					fade_in = true;
 					break;
-					
+
 				case MENU_FULLSCREEN:
 					JE_playSampleNum(S_SELECT);
 
 					reinit_fullscreen(temp_fullscreen_display);
 					break;
-					
+
 				case MENU_SCALER:
 					JE_playSampleNum(S_SELECT);
 
@@ -276,7 +286,7 @@ void opentyrian_menu( void )
 						}
 					}
 					break;
-					
+
 				case MENU_SCALING_MODE:
 					JE_playSampleNum(S_SELECT);
 					scaling_mode = temp_scaling_mode;
@@ -292,23 +302,23 @@ void opentyrian_menu( void )
 					JE_showVGA();
 					fade_in = true;
 					break;
-					
+
 				case MENU_RETURN:
 					quit = true;
 					JE_playSampleNum(S_SPRING);
 					break;
-					
+
 				case MenuOptions_MAX:
 					assert(false);
 					break;
 				}
 				break;
-				
+
 			case SDL_SCANCODE_ESCAPE:
 				quit = true;
 				JE_playSampleNum(S_SPRING);
 				break;
-				
+
 			default:
 				break;
 			}
@@ -318,6 +328,9 @@ void opentyrian_menu( void )
 
 int main( int argc, char *argv[] )
 {
+#ifdef __PS4__
+    SDL_LogSetOutputFunction((SDL_LogOutputFunction) &log_cb, NULL);
+#endif
 	mt_srand(time(NULL));
 
 	printf("\nWelcome to... >> %s %s <<\n\n", opentyrian_str, opentyrian_version);

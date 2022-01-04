@@ -32,5 +32,11 @@ tyrian.sav
 /visualc/*.props
 /visualc/*.user
 
+# Ps4 (clion)
+.idea
+cmake-build-*
+# Ps4 (game data)
+pkg/assets
+
 # Doxygen output
 /doc/doxygen/
